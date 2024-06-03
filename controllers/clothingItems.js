@@ -54,7 +54,6 @@ const updateItem = (req, res) => {
     });
 };
 
-//delete
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
   ClothingItem.findByIdAndDelete(itemId)
