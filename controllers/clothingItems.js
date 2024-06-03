@@ -17,8 +17,8 @@ const createItem = (req, res) => {
           .send({ message: err.message });
       }
       return res
-          .status(RESPONSE_CODES.SERVER_ERROR)
-          .send({ message: err.message });
+        .status(RESPONSE_CODES.SERVER_ERROR)
+        .send({ message: err.message });
     });
 };
 
@@ -50,14 +50,12 @@ const updateItem = (req, res) => {
       }
       if (err.name === "DocumentNotFoundError") {
         return res
-        .status(RESPONSE_CODES.NOT_FOUND)
-        .send({ message: err.message });
-      } else {
-        return res
+          .status(RESPONSE_CODES.NOT_FOUND)
+          .send({ message: err.message });
+      }
+      return res
         .status(RESPONSE_CODES.SERVER_ERROR)
         .send({ message: err.message });
-      }
-
     });
 };
 
