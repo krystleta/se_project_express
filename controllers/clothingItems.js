@@ -15,10 +15,9 @@ const createItem = (req, res) => {
         return res
           .status(RESPONSE_CODES.INVALID_DATA)
           .send({ message: err.message });
+      } else {
+        res.status(RESPONSE_CODES.SERVER_ERROR).send({ message: err.message });
       }
-      return res
-        .status(RESPONSE_CODES.SERVER_ERROR)
-        .send({ message: err.message });
     });
 };
 
@@ -58,7 +57,9 @@ const deleteItem = (req, res) => {
   const { itemId } = req.params;
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
-    .then((item) => res.status(RESPONSE_CODES.REQUEST_SUCCESSFUL).send({ data: item }))
+    .then((item) =>
+      res.status(RESPONSE_CODES.REQUEST_SUCCESSFUL).send({ data: item })
+    )
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {
