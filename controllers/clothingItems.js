@@ -47,11 +47,10 @@ const updateItem = (req, res) => {
         return res
           .status(RESPONSE_CODES.INVALID_DATA)
           .send({ message: err.message });
-      } else {
-        return res
-          .status(RESPONSE_CODES.SERVER_ERROR)
-          .send({ message: err.message });
       }
+      return res
+        .status(RESPONSE_CODES.SERVER_ERROR)
+        .send({ message: err.message });
     });
 };
 
@@ -71,11 +70,10 @@ const deleteItem = (req, res) => {
         return res
           .status(RESPONSE_CODES.INVALID_DATA)
           .send({ message: err.message });
-      } else {
-        return res
-          .status(RESPONSE_CODES.SERVER_ERROR)
-          .send({ message: err.message });
       }
+      return res
+        .status(RESPONSE_CODES.SERVER_ERROR)
+        .send({ message: err.message });
     });
 };
 
@@ -99,11 +97,10 @@ const likeItem = (req, res) => {
         return res
           .status(RESPONSE_CODES.INVALID_DATA)
           .send({ message: err.message });
-      } else {
-        return res
-          .status(RESPONSE_CODES.SERVER_ERROR)
-          .send({ message: err.message });
       }
+      return res
+        .status(RESPONSE_CODES.SERVER_ERROR)
+        .send({ message: err.message });
     });
 };
 
@@ -127,11 +124,10 @@ const dislikeItem = (req, res) => {
         return res
           .status(RESPONSE_CODES.INVALID_DATA)
           .send({ message: err.message });
-      } else {
-        return res
-          .status(RESPONSE_CODES.SERVER_ERROR)
-          .send({ message: err.message });
       }
+      return res
+        .status(RESPONSE_CODES.SERVER_ERROR)
+        .send({ message: err.message });
     });
 };
 
