@@ -19,7 +19,7 @@ const createUser = (req, res) => {
     .then((user) => res.status(RESPONSE_CODES.REQUEST_CREATED).send(user))
     .catch((err) => {
       console.error(err);
-      if (err.name === "ValidationError") {
+      if (err.name === "ValidationError" || err.name === "AssertionError") {
         return res
           .status(RESPONSE_CODES.INVALID_DATA)
           .send({ message: err.message });

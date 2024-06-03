@@ -11,15 +11,14 @@ const createItem = (req, res) => {
     )
     .catch((err) => {
       console.error(err);
-      if (err.name === "ValidationError") {
+      if (err.name === "ValidationError" || err.name === "AssertionError") {
         return res
           .status(RESPONSE_CODES.INVALID_DATA)
           .send({ message: err.message });
-      } else {
-        return res
+      }
+      return res
           .status(RESPONSE_CODES.SERVER_ERROR)
           .send({ message: err.message });
-      }
     });
 };
 
