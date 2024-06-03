@@ -16,7 +16,9 @@ const createItem = (req, res) => {
           .status(RESPONSE_CODES.INVALID_DATA)
           .send({ message: err.message });
       } else {
-        res.status(RESPONSE_CODES.SERVER_ERROR).send({ message: err.message });
+        return res
+          .status(RESPONSE_CODES.SERVER_ERROR)
+          .send({ message: err.message });
       }
     });
 };
@@ -42,14 +44,21 @@ const updateItem = (req, res) => {
     )
     .catch((err) => {
       console.error(err);
-      if (err.name === "DocumentNotFoundError") {
+      if (err.name === "ValidationError" || err.name === "AssertionError") {
         return res
           .status(RESPONSE_CODES.INVALID_DATA)
           .send({ message: err.message });
       }
-      return res
+      if (err.name === "DocumentNotFoundError") {
+        return res
+        .status(RESPONSE_CODES.NOT_FOUND)
+        .send({ message: err.message });
+      } else {
+        return res
         .status(RESPONSE_CODES.SERVER_ERROR)
         .send({ message: err.message });
+      }
+
     });
 };
 
