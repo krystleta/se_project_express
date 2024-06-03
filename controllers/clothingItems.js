@@ -15,11 +15,10 @@ const createItem = (req, res) => {
         return res
           .status(RESPONSE_CODES.INVALID_DATA)
           .send({ message: err.message });
-      } else {
-        return res
-          .status(RESPONSE_CODES.SERVER_ERROR)
-          .send({ message: err.message });
       }
+      return res
+        .status(RESPONSE_CODES.SERVER_ERROR)
+        .send({ message: err.message });
     });
 };
 
