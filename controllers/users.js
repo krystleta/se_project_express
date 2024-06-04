@@ -8,7 +8,7 @@ const getUsers = (req, res) => {
       console.error(err);
       return res
         .status(RESPONSE_CODES.SERVER_ERROR)
-        .send({ message: err.message });
+        .send({ message: "An error has occurred on the server." });
     });
 };
 
@@ -19,14 +19,14 @@ const createUser = (req, res) => {
     .then((user) => res.status(RESPONSE_CODES.REQUEST_CREATED).send(user))
     .catch((err) => {
       console.error(err);
-      if (err.name === "ValidationError" || err.name === "AssertionError") {
+      if (err.name === "ValidationError") {
         return res
           .status(RESPONSE_CODES.INVALID_DATA)
-          .send({ message: err.message });
+          .send({ message: "Invalid data." });
       }
       return res
         .status(RESPONSE_CODES.SERVER_ERROR)
-        .send({ message: err.message });
+        .send({ message: "An error has occurred on the server." });
     });
 };
 
@@ -45,11 +45,11 @@ const getUser = (req, res) => {
       if (err.name === "CastError") {
         return res
           .status(RESPONSE_CODES.INVALID_DATA)
-          .send({ message: err.message });
+          .send({ message: "Invalid data." });
       }
       return res
         .status(RESPONSE_CODES.SERVER_ERROR)
-        .send({ message: err.message });
+        .send({ message: "An error has occurred on the server." });
     });
 };
 

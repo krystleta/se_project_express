@@ -11,14 +11,14 @@ const createItem = (req, res) => {
     )
     .catch((err) => {
       console.error(err);
-      if (err.name === "ValidationError" || err.name === "AssertionError") {
+      if (err.name === "ValidationError") {
         return res
           .status(RESPONSE_CODES.INVALID_DATA)
-          .send({ message: err.message });
+          .send({ message: "Invalid data." });
       }
       return res
         .status(RESPONSE_CODES.SERVER_ERROR)
-        .send({ message: err.message });
+        .send({ message: "An error has occurred on the server." });
     });
 };
 
@@ -29,33 +29,7 @@ const getItems = (req, res) => {
       console.error(err);
       return res
         .status(RESPONSE_CODES.SERVER_ERROR)
-        .send({ message: err.message });
-    });
-};
-
-const updateItem = (req, res) => {
-  const { itemId } = req.params;
-  const { imageUrl } = req.body;
-  ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } })
-    .orFail()
-    .then((item) =>
-      res.status(RESPONSE_CODES.REQUEST_SUCCESSFUL).send({ data: item })
-    )
-    .catch((err) => {
-      console.error(err);
-      if (err.name === "ValidationError" || err.name === "AssertionError") {
-        return res
-          .status(RESPONSE_CODES.INVALID_DATA)
-          .send({ message: err.message });
-      }
-      if (err.name === "DocumentNotFoundError") {
-        return res
-          .status(RESPONSE_CODES.NOT_FOUND)
-          .send({ message: err.message });
-      }
-      return res
-        .status(RESPONSE_CODES.SERVER_ERROR)
-        .send({ message: err.message });
+        .send({ message: "An error has occurred on the server." });
     });
 };
 
@@ -76,11 +50,11 @@ const deleteItem = (req, res) => {
       if (err.name === "CastError") {
         return res
           .status(RESPONSE_CODES.INVALID_DATA)
-          .send({ message: err.message });
+          .send({ message: "Invalid data." });
       }
       return res
         .status(RESPONSE_CODES.SERVER_ERROR)
-        .send({ message: err.message });
+        .send({ message: "An error has occurred on the server." });
     });
 };
 
@@ -104,11 +78,11 @@ const likeItem = (req, res) => {
       if (err.name === "CastError") {
         return res
           .status(RESPONSE_CODES.INVALID_DATA)
-          .send({ message: err.message });
+          .send({ message: "Invalid data." });
       }
       return res
         .status(RESPONSE_CODES.SERVER_ERROR)
-        .send({ message: err.message });
+        .send({ message: "An error has occurred on the server." });
     });
 };
 
@@ -132,18 +106,17 @@ const dislikeItem = (req, res) => {
       if (err.name === "CastError") {
         return res
           .status(RESPONSE_CODES.INVALID_DATA)
-          .send({ message: err.message });
+          .send({ message: "Invalid data." });
       }
       return res
         .status(RESPONSE_CODES.SERVER_ERROR)
-        .send({ message: err.message });
+        .send({ message: "An error has occurred on the server." });
     });
 };
 
 module.exports = {
   createItem,
   getItems,
-  updateItem,
   deleteItem,
   likeItem,
   dislikeItem,
