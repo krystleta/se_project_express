@@ -35,11 +35,18 @@ const getItems = (req, res) => {
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
-  ClothingItem.findByIdAndDelete(itemId)
+  ClothingItem.findById(itemId)
     .orFail()
-    .then((item) =>
-      res.status(RESPONSE_CODES.REQUEST_SUCCESSFUL).send({ data: item })
-    )
+    .then((item) => {
+      if (!item.owner.equals(req.user._id)) {
+        return res
+        .status(RESPONSE_CODES.FORBIDDEN)
+        .send({ message: "You are not authorized to perform this action." });
+      }
+      return item
+      .deleteOne()
+      .then(() => res.status(RESPONSE_CODES.REQUEST_SUCCESSFUL).send({ data: item }));
+    })
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {
