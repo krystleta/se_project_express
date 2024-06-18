@@ -119,13 +119,10 @@ const loginUser = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      if (
-        err.message === "Incorrect email" ||
-        err.message === "Incorrect password"
-      ) {
+      if (err.message === "Incorrect email or password.") {
         return res
           .status(RESPONSE_CODES.UNAUTHORIZED)
-          .send({ message: "Incorrect email or password" });
+          .send({ message: "Incorrect email or password." });
       }
       return res
         .status(RESPONSE_CODES.SERVER_ERROR)

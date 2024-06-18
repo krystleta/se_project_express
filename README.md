@@ -1,4 +1,4 @@
-# Project 12: Express, MongooseDB
+# Project 13: Authorization
 
 ### Overview  
 
@@ -8,11 +8,11 @@
   
 **Description**
   
-Project 12 is the first back-end project focusing on creating Routes, Controllers and Middleware. We are creating a server for the "WTWR" project with an API and user authorization.
+Project 13 is a continuation with the Express project by expanding schemas to allow for authorization implementation. 
 
 **Technologies and  techniques**  
   
-Technologies and techniques used are Express, creating a database with MongooseDB, using Postman to test API calls and we are also demonstrating how to handle errors.
+Technologies and techniques used are implementing a middleware authorization and creating routes for signing up and signing in. We use JSON web tokens (JWT) and running more tests on Postman to verify authorization is working correctly.
 
   
 **Link to the project**  
