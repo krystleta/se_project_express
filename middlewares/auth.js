@@ -8,9 +8,7 @@ const handleAuthError = (res) => {
     .send({ message: "Authorization Error." });
 };
 
-const extractBearerToken = (header) => {
-  return header.replace("Bearer ", "");
-};
+const extractBearerToken = (header) => header.replace("Bearer ", "");
 
 const auth = (req, res, next) => {
   const { authorization } = req.headers;
@@ -31,7 +29,7 @@ const auth = (req, res, next) => {
 
   req.user = payload;
 
-  next();
+  return next();
 };
 
 module.exports = { auth };

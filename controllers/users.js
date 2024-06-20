@@ -1,6 +1,6 @@
-const User = require("../models/user");
-const bcrpyt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const bcrpyt = require("bcryptjs");
+const User = require("../models/user");
 const RESPONSE_CODES = require("../utils/errors");
 const { JWT_SECRET } = require("../utils/config");
 
@@ -39,12 +39,6 @@ const createUser = (req, res) => {
           .send({ message: "An error has occurred on the server." });
       });
   });
-  // } else {
-  //   const ConflictError = new Error(
-  //     "Email address has already been used, please try another email address."
-  //   );
-  //   //ConflictError.statusCode = RESPONSE_CODES.CONFLICT;
-  //   throw ConflictError;
 };
 
 const getCurrentUser = (req, res) => {
@@ -86,7 +80,7 @@ const updateUser = (req, res) => {
           .status(RESPONSE_CODES.NOT_FOUND)
           .send({ message: err.message });
       }
-      if (err.name === "CastError") {
+      if (err.name === "CastError" || err.name === "ValidationError") {
         return res
           .status(RESPONSE_CODES.INVALID_DATA)
           .send({ message: "Invalid data." });
