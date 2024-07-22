@@ -1,10 +1,17 @@
 const jwt = require("jsonwebtoken");
 const bcrpyt = require("bcryptjs");
 const User = require("../models/user");
-const RESPONSE_CODES = require("../utils/errors");
 const { JWT_SECRET } = require("../utils/config");
+const {
+  BadRequestError,
+  UnauthorizedError,
+  ForbiddenError,
+  NotFoundError,
+  ConflictError,
+  RESPONSE_CODES,
+} = require("../utils/errors");
 
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
 
   if (!email || !password) {
@@ -25,46 +32,35 @@ const createUser = (req, res) => {
       .catch((err) => {
         console.error(err);
         if (err.name === "ValidationError") {
-          return res
-            .status(RESPONSE_CODES.INVALID_DATA)
-            .send({ message: "Invalid data." });
+          next(new BadRequestError("Invalid data")); // Use custom error
+        } else if (err.name === "MongoServerError" && err.code === 11000) {
+          next(new ConflictError('This email address already exists.')); // Provide a consistent message
+        } else {
+          next(err); // Pass the error to the centralized error handler
         }
-        if (err.name === "MongoServerError" && err.code === 11000) {
-          return res
-            .status(RESPONSE_CODES.CONFLICT)
-            .send({ message: "This email address already exists." });
-        }
-        return res
-          .status(RESPONSE_CODES.SERVER_ERROR)
-          .send({ message: "An error has occurred on the server." });
       });
   });
 };
 
-const getCurrentUser = (req, res) => {
+const getCurrentUser = (req, res, next) => {
   const { _id } = req.user;
   User.findById(_id)
     .orFail()
     .then((user) => res.status(RESPONSE_CODES.REQUEST_SUCCESSFUL).send(user))
     .catch((err) => {
       console.error(err);
-      if (err.name === "DocumentNotFoundError") {
-        return res
-          .status(RESPONSE_CODES.NOT_FOUND)
-          .send({ message: err.message });
+
+      if (err.name === 'DocumentNotFoundError') {
+        next(new NotFoundError('Item not found')); // Provide a consistent message
+      } else if (err.name === 'CastError') {
+        next(new BadRequestError('Invalid item ID')); // Provide a consistent message
+      } else {
+        next(err); // Pass the error to the centralized error handler
       }
-      if (err.name === "CastError") {
-        return res
-          .status(RESPONSE_CODES.INVALID_DATA)
-          .send({ message: "Invalid data." });
-      }
-      return res
-        .status(RESPONSE_CODES.SERVER_ERROR)
-        .send({ message: "An error has occurred on the server." });
     });
 };
 
-const updateUser = (req, res) => {
+const updateUser = (req, res, next) => {
   const { name, avatar } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
@@ -75,23 +71,18 @@ const updateUser = (req, res) => {
     .then((user) => res.status(RESPONSE_CODES.REQUEST_SUCCESSFUL).send(user))
     .catch((err) => {
       console.error(err);
-      if (err.name === "DocumentNotFoundError") {
-        return res
-          .status(RESPONSE_CODES.NOT_FOUND)
-          .send({ message: err.message });
+
+      if (err.name === 'DocumentNotFoundError') {
+        next(new NotFoundError('Item not found')); // Provide a consistent message
+      } else if (err.name === 'CastError') {
+        next(new BadRequestError('Invalid item ID')); // Provide a consistent message
+      } else {
+        next(err); // Pass the error to the centralized error handler
       }
-      if (err.name === "CastError" || err.name === "ValidationError") {
-        return res
-          .status(RESPONSE_CODES.INVALID_DATA)
-          .send({ message: "Invalid data." });
-      }
-      return res
-        .status(RESPONSE_CODES.SERVER_ERROR)
-        .send({ message: "An error has occurred on the server." });
     });
 };
 
-const loginUser = (req, res) => {
+const loginUser = (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {

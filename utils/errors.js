@@ -7,6 +7,62 @@ const RESPONSE_CODES = {
   UNAUTHORIZED: 401,
   CONFLICT: 409,
   FORBIDDEN: 403,
+};
+
+class BadRequestError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = RESPONSE_CODES.INVALID_DATA;
+    this.name = "BadRequestError";
+  }
 }
 
-module.exports = RESPONSE_CODES;
+class UnauthorizedError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = RESPONSE_CODES.UNAUTHORIZED;
+    this.name = "UnauthorizedError";
+  }
+}
+
+class ForbiddenError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = RESPONSE_CODES.FORBIDDEN;
+    this.name = "ForbiddenError";
+  }
+}
+
+class NotFoundError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = RESPONSE_CODES.NOT_FOUND;
+    this.name = "NotFoundError";
+  }
+}
+
+class ConflictError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = RESPONSE_CODES.CONFLICT;
+    this.name = "ConflictError";
+  }
+}
+
+class InternalServerError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = RESPONSE_CODES.SERVER_ERROR;
+    this.name = "InternalServerError";
+  }
+}
+
+module.exports = {
+  BadRequestError,
+  UnauthorizedError,
+  ForbiddenError,
+  NotFoundError,
+  ConflictError,
+  InternalServerError,
+  RESPONSE_CODES,
+}
