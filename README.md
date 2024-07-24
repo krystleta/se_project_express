@@ -1,4 +1,4 @@
-# Project 14: Full stack application
+# Project 15: Full stack application
 
 ### Overview  
 
@@ -8,17 +8,18 @@
   
 **Description**
   
-Project 14 is where we piece together our project as a full stack application. We connect our front end React project with our back end Express application. We are now making calls to the API we have created and storing data into the WTWR Mongo Database.
+Project 15 has now been deployed to a server where the WTWR application can now be accessed from anywhere! 
 
 **Technologies and  techniques**  
   
-The additional technologies and techniques used are React Hooks and Routes, Contexts to allow us to store information about the current user. Logic for signing up and signing in/out. Authorization using tokens to ensure certain parts of the application are protected and only accessible by an authorized user.
+The additional technologies and techniques used are Google Cloud where a new VM was created to host the WTWR application. We used NGINX to serve the front end site and deployed using several command lines.
 
   
 **Link to the project**  
   
 * [Link to the React project on Github](https://github.com/krystleta/se_project_react)  
 * [Link to the Express project on Github](https://github.com/krystleta/se_project_express)  
+* [Link to the WTWR project](https://www.wtwrkt.jumpingcrab.com/)  
 
 **NOTES**  
 
