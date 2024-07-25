@@ -1,9 +1,8 @@
 const ClothingItem = require("../models/clothingItem");
-const {
-  BadRequestError,
-  NotFoundError,
-  RESPONSE_CODES
-} = require("../utils/errors");
+const { RESPONSE_CODES } = require("../utils/errors");
+const { BadRequestError } = require("../errors/bad-request");
+const { NotFoundError } = require("../errors/not-found");
+const { ForbiddenError } = require("../errors/forbidden");
 
 const createItem = (req, res, next) => {
   const { name, weather, imageUrl } = req.body;
@@ -16,7 +15,7 @@ const createItem = (req, res, next) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "ValidationError") {
-        next(new BadRequestError("Invalid data")); // Use custom error
+        next(new BadRequestError("Invalid data"));
       } else {
         next(err);
       }
@@ -28,7 +27,7 @@ const getItems = (req, res, next) => {
     .then((items) => res.status(RESPONSE_CODES.REQUEST_SUCCESSFUL).send(items))
     .catch((err) => {
       console.error(err);
-      next(err); // Pass the error to the centralized error-handling middleware
+      next(err);
     });
 };
 
@@ -38,9 +37,7 @@ const deleteItem = (req, res, next) => {
     .orFail()
     .then((item) => {
       if (!item.owner.equals(req.user._id)) {
-        return res
-          .status(RESPONSE_CODES.FORBIDDEN)
-          .send({ message: "You are not authorized to perform this action." });
+        return next(new ForbiddenError('You are not authorized to perform this action'));
       }
       return item
         .deleteOne()
@@ -50,13 +47,12 @@ const deleteItem = (req, res, next) => {
     })
     .catch((err) => {
       console.error(err);
-
       if (err.name === 'DocumentNotFoundError') {
-        next(new NotFoundError('Item not found')); // Provide a consistent message
+        next(new NotFoundError('Item not found'));
       } else if (err.name === 'CastError') {
-        next(new BadRequestError('Invalid item ID')); // Provide a consistent message
+        next(new BadRequestError('Invalid item ID'));
       } else {
-        next(err); // Pass the error to the centralized error handler
+        next(err);
       }
     });
 };
@@ -73,13 +69,12 @@ const likeItem = (req, res, next) => {
     )
     .catch((err) => {
       console.error(err);
-
       if (err.name === 'DocumentNotFoundError') {
-        next(new NotFoundError('Item not found')); // Provide a consistent message
+        next(new NotFoundError('Item not found'));
       } else if (err.name === 'CastError') {
-        next(new BadRequestError('Invalid item ID')); // Provide a consistent message
+        next(new BadRequestError('Invalid item ID'));
       } else {
-        next(err); // Pass the error to the centralized error handler
+        next(err);
       }
     });
 };
@@ -98,11 +93,11 @@ const dislikeItem = (req, res, next) => {
       console.error(err);
 
       if (err.name === 'DocumentNotFoundError') {
-        next(new NotFoundError('Item not found')); // Provide a consistent message
+        next(new NotFoundError('Item not found'));
       } else if (err.name === 'CastError') {
-        next(new BadRequestError('Invalid item ID')); // Provide a consistent message
+        next(new BadRequestError('Invalid item ID'));
       } else {
-        next(err); // Pass the error to the centralized error handler
+        next(err);
       }
     });
 };
